@@ -16,7 +16,10 @@ def check_directory():
     save_config(handler.count)
 
 
-def app_exit(message, title):
+def notify(exception):
+
+    message = f"Running of application was finished with error: {exception}"
+    title = "Backgrounds"
     plt = platform.system()
     if plt == "Darwin":
         command = '''
@@ -42,7 +45,7 @@ def start():
             seconds = (time.tm_hour * 60 ** 2) + (time.tm_min * 60) + time.tm_sec
             sleep(seconds)
     except Exception as exception:
-        app_exit(f"Running of application was finished with error: {exception}", "Backgrounds")
+        notify(exception)
     finally:
         exit(0)
 

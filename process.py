@@ -2,7 +2,6 @@ import boto3
 
 from os.path import join, isfile
 from os import rename, listdir, remove
-
 from botocore.client import Config
 
 
@@ -31,8 +30,12 @@ class Handler:
         files = [file for file in listdir(self.path) if isfile(join(self.path, file))]
         for file in files:
             filename = self.rename_file(file)
+            if len(filename) == 0:
+                files.append(file)
+                continue
             self.save_file(filename)
             self.remove_file(filename)
+            print(filename)
 
     def save_file(self, file):
         filename = file.split('.')[0]
@@ -41,10 +44,12 @@ class Handler:
 
     def rename_file(self, file):
         new_filename = str(self.count) + self.extension
-        old_filename = file[:file.rindex('.')]
-        if not (str(old_filename).isdigit() and int(old_filename) < self.count):
+        try:
             rename(join(self.path, file), join(self.path, new_filename))
             self.count += 1
+        except WindowsError:
+            return ''
+
         return new_filename
 
     def remove_file(self, file):

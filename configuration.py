@@ -2,6 +2,7 @@ import json
 
 
 def save_config(count):
+    update_config()
     Configuration.CONFIG.update({'count': count})
     with open(Configuration.CONFIGURATION_FILENAME, 'w') as f:
         json.dump(Configuration.CONFIG, f)
