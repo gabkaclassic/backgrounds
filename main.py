@@ -1,9 +1,12 @@
-from configuration import Configuration, update_config, save_config
 from time import strptime, sleep
+
+import os
+import platform
+import win10toast
+
+from configuration import Configuration, update_config, save_config
 from process import Handler
 from whallpaper_chooser import set_wallpaper
-
-import win10toast, platform, os
 
 FORMAT_TIME = "%H:%M:%S"
 
@@ -22,7 +25,7 @@ def notify(exception):
     title = "Backgrounds"
     plt = platform.system()
     if plt == "Darwin":
-        command = '''
+        command = f'''
         osascript -e 'display notification "{message}" with title "{title}"'
         '''
     elif plt == "Linux":
