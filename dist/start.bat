@@ -1,1 +1,2 @@
 start backgrounds.exe
+pause
