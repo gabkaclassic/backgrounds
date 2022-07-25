@@ -1,3 +1,4 @@
+import subprocess
 from time import strptime, sleep
 
 import os
@@ -9,7 +10,7 @@ from process import Handler
 from whallpaper_chooser import set_wallpaper
 
 FORMAT_TIME = "%H:%M:%S"
-
+SECONDS_WAIT_CONNECTION = 30
 
 def check_directory():
     update_config()
@@ -18,6 +19,12 @@ def check_directory():
     set_wallpaper(handler)
     save_config(handler.count)
 
+def has_connect():
+    try:
+        subprocess.check_call(["ping", "-c 1", "www.google.ru"])
+        return True
+    except subprocess.CalledProcessError:
+        return False
 
 def notify(exception):
 
@@ -43,6 +50,8 @@ def notify(exception):
 def start():
     try:
         while True:
+            while not has_connect():
+                sleep(SECONDS_WAIT_CONNECTION)
             check_directory()
             time = strptime(Configuration.CONFIG['sleep_time'], FORMAT_TIME)
             seconds = (time.tm_hour * 60 ** 2) + (time.tm_min * 60) + time.tm_sec
