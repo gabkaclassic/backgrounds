@@ -21,7 +21,12 @@ def check_directory():
 
 def has_connect():
     try:
-        subprocess.check_call(["ping", "-c 1", "www.google.ru"])
+
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags = subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+        subprocess.check_call(["ping", "www.google.ru"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
         return True
     except subprocess.CalledProcessError:
         return False
